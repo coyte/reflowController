@@ -2,10 +2,10 @@
 // ***** INCLUDES *****
 #include <Arduino.h>
 #include <EEPROM.h>
-#include <PID_v1.h>
+#include <PID_v1.h>   //https://github.com/br3ttb/Arduino-PID-Library
 #include <SPI.h>
-#include <Ucglib.h>  //https://github.com/olikraus/ucglib
-#include <max6675.h> //https://github.com/adafruit/MAX6675-library.git
+#include <Ucglib.h>   //https://github.com/olikraus/ucglib
+#include <max6675.h>  //https://github.com/adafruit/MAX6675-library.git
 
 // ***** TYPE DEFINITIONS *****
 typedef enum REFLOW_STATE
@@ -103,7 +103,7 @@ unsigned char degree[8]  = {
 // ***** PIN ASSIGNMENTS *****
 //Display ST7735
 #define TFT_CS      10
-#define TFT_RST     8  
+#define TFT_RST     8
 #define TFT_DC      9
 
 //MAX6675 module (does not like multiple device on bus, so swSPI)
@@ -198,7 +198,7 @@ void setup()
   // Buzzer pin initialization to ensure annoying buzzer is off
   pinMode(buzzerPin, OUTPUT);
   digitalWrite(buzzerPin, LOW);
-  
+
 
   // LED pins initialization and turn on upon start-up (active high)
   pinMode(ledPin, OUTPUT);
@@ -208,13 +208,13 @@ void setup()
   pinMode(ventPin, OUTPUT);
   digitalWrite(ventPin, LOW);
 
-  Serial.println("Initializing Display + 8 sec wait"); 
+  Serial.println("Initializing Display + 8 sec wait");
   // Init TFT
   ucg.begin(UCG_FONT_MODE_TRANSPARENT);
   ucg.clearScreen();
   ucg.setColor(1,255,255,255);		// use white as background for SOLID mode
   ucg.setColor(0,255,255,255);    // set active color white for box
-  ucg.drawBox(0, 0, 128,160);     // draw white box 
+  ucg.drawBox(0, 0, 128,160);     // draw white box
   ucg.setColor(0,0,0,0);          // set active Black for text
   ucg.setPrintPos(5,45);
   ucg.setPrintDir(0);
@@ -305,7 +305,7 @@ void loop()
     // Print current system state
     ucg.setPrintPos(6,57);
     ucg.print(lcdMessagesReflowStatus[reflowState]);
-  
+
     if (reflowProfile == REFLOW_PROFILE_LEADFREE)
     {
       ucg.setPrintPos(7,152);
@@ -468,7 +468,7 @@ void loop()
       }
       break;
 
-    
+
   }
 
   // If switch 1 is pressed
@@ -521,7 +521,7 @@ void loop()
       if (switchValue != SWITCH_NONE)
       {
         // Keep track of the pressed switch
-        //Serial.println("Button pressed, setting debouncestate to DEBOUNCE_STATE_CHECK"); 
+        //Serial.println("Button pressed, setting debouncestate to DEBOUNCE_STATE_CHECK");
         switchMask = switchValue;
         // Intialize debounce counter
         lastDebounceTime = millis();
@@ -590,7 +590,7 @@ switch_t readSwitch(void)
 
   switchAdcValue = analogRead(switchPin);
   //Serial.print("Value of switchAdcValue: "); Serial.println(switchAdcValue); //print value of switch
-  // Add some allowance (+10 ADC step) as ADC reading might be off a little 
+  // Add some allowance (+10 ADC step) as ADC reading might be off a little
   // due to 3V3 deviation and also resistor value tolerance
   if (switchAdcValue >= 870) return SWITCH_NONE;
   if (switchAdcValue <= 10) return SWITCH_1;
